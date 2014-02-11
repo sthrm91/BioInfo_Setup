@@ -5,11 +5,17 @@ build command: make
 
 run command: ./proc
 
-# Inputs: No input required.
+# Inputs: 
 
-# Outputs: The heatmap, and highest/lowest accuracies.
+No input required.
 
-# What is it: This program runs 10-fold cross validation experiment on the CU dataset, and prints the heatmap of different model parameter combinations.
+# Outputs: 
+
+The heatmap, and highest/lowest accuracies.
+
+# What is it: 
+
+This program runs 10-fold cross validation experiment on the CU dataset, and prints the heatmap of different model parameter combinations.
 
 # How it works: 
 
