@@ -1,6 +1,8 @@
 import os
+#Specify the directory of the input files here
 directory="/home/sethuraman/Documents/Kahveci/RawDataSets/LeukemiaData/GSE33315_sorted/"
 fileList=os.listdir(directory)
+#Specify the file for which has the mapping from probes to genes
 nfp=open("/home/sethuraman/Documents/Kahveci/ProbeToGeneMapper","r")
 li=nfp.readlines()
 probeMap=dict()
@@ -23,9 +25,11 @@ while counter<len(fileList):
     fp.close()
     for each in rd:
         l=each.split('\t')
+        # checks if the probe exists in the probe map otherwise ignored
         if probeMap.has_key(l[0][1:-1]):
             k=probeMap[l[0][1:-1]]
             val=float(l[1])
+            # checks if the probe has a greater value than the existing one. If yes then updated otherwise ignored
             if d.has_key(k):
                 if (d[k]<val):
                     d[k]=val
@@ -39,6 +43,7 @@ while counter<len(fileList):
         comProbes=comProbes.intersection(set(d.keys()))
     vector[fileList[counter]]=d
     counter+=1
+# writing to the output file
 wfp=open("/home/sethuraman/Documents/Kahveci/preprocessing/"+"Vector.txt","w+")
 perList=vector.keys()
 colList=list(comProbes)
@@ -48,7 +53,7 @@ clsfp=open("/home/sethuraman/Documents/Kahveci/RawDataSets/LeukemiaData/class.tx
 clslines=clsfp.readlines()
 clsfp.close()
 perCls=dict()
-wfp.write("%d %d\n"%(len(perList),len(colList)))
+wfp.write("%d %d\n"%(len(colList),len(perList)))
 for each in clslines:
           spl=each.strip().split("\t")
           perCls[spl[0].strip()]=spl[1].strip()
