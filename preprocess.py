@@ -1,9 +1,9 @@
 import os
 #Specify the directory of the input files here
-directory="/home/sethuraman/Documents/Kahveci/RawDataSets/LeukemiaData/GSE33315_sorted/"
+directory="/home/sethuraman/Documents/SVM/KahveciLab/LeukemiaData/GSE33315_sorted/"
 fileList=os.listdir(directory)
 #Specify the file for which has the mapping from probes to genes
-nfp=open("/home/sethuraman/Documents/Kahveci/ProbeToGeneMapper","r")
+nfp=open("/home/sethuraman/Documents/SVM/KahveciLab/LeukemiaData/ProbeToGeneMapper","r")
 li=nfp.readlines()
 probeMap=dict()
 for each in li:
@@ -44,23 +44,24 @@ while counter<len(fileList):
     vector[fileList[counter]]=d
     counter+=1
 # writing to the output file
-wfp=open("/home/sethuraman/Documents/Kahveci/preprocessing/"+"Vector.txt","w+")
+wfp=open("/home/sethuraman/Documents/SVM/KahveciLab/preprocessing/"+"Vector_without_7.txt","w+")
 perList=vector.keys()
 colList=list(comProbes)
 print len(comProbes)
-print " perList size:%d ColList size:%d"%(len(perList),len(colList))
-clsfp=open("/home/sethuraman/Documents/Kahveci/RawDataSets/LeukemiaData/class.txt","r")
-clslines=clsfp.readlines()
-clsfp.close()
+clsfp=open("/home/sethuraman/Documents/SVM/KahveciLab/LeukemiaData/class.txt","r")
 perCls=dict()
-wfp.write("%d %d\n"%(len(colList),len(perList)))
+clslines=clsfp.readlines()
 for each in clslines:
           spl=each.strip().split("\t")
-          perCls[spl[0].strip()]=spl[1].strip()
-for person in perList:
+          if spl[1].strip() in ["1","2","3","4","8"]:
+              perCls[spl[0].strip()]=spl[1].strip()
+clsfp.close()
+print " perList size:%d ColList size:%d"%(len(perCls),len(colList))
+wfp.write("%d %d\n"%(len(colList),len(perCls)))
+for person in perCls.keys():
           line=perCls[person]
           x=vector[person]
           for col in colList:
-              line+=" %f"%(x[col])
+                line+=" %f"%(x[col])
           wfp.write("%s\n"%(line))
 wfp.close()
